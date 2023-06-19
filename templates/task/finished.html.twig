@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
+
+{% block body %}
+    <div class="row">
+        {% for task in tasksFinished %}
+        <div class="col-sm-4 col-lg-4 col-md-4">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h4 class="pull-right">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </h4>
+                    <h4><a href="{{ path('task_edit', {'id' : task.id }) }}">{{ task.title }}</a></h4>
+                    <p>{{ task.content }}</p>
+                </div>
+                <div>
+                    <form action="{{ path('task_toggle', {'id' : task.id }) }}">
+                        <button class="btn btn-success btn-sm pull-right">
+                            Marquer non terminée
+                        </button>
+                    </form>
+                    <form action="{{ path('task_delete', {'id' : task.id }) }}">
+                        <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
