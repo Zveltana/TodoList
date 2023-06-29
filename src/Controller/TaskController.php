@@ -32,6 +32,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $task->setAuthor($this->getUser());
             $task->setCreatedAt(new \DateTimeImmutable());
             $em = $entityManager;
 
@@ -67,13 +68,14 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
-    public function edit(Task $task, Request $request): Response
+    public function edit(Task $task, Request $request, TaskRepository $taskRepository): Response
     {
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $taskRepository->save($task, true);
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 

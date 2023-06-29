@@ -26,6 +26,10 @@ class Task
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ["persist"], inversedBy: 'task')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +79,18 @@ class Task
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
