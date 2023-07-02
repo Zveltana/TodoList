@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Entity\User;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
+use App\Security\Voter\TaskVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,11 +95,11 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
     public function toggle(Task $task, EntityManagerInterface $em): Response
     {
-        if ($task->isIsDone() !== true) {
-            $task->setIsDone(true);
+        if ($task->isDone() !== true) {
+            $task->setDone(true);
             $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
         } else {
-            $task->setIsDone(false);
+            $task->setDone(false);
             $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme non terminée.', $task->getTitle()));
         }
 
@@ -110,6 +111,7 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
     public function delete(Task $task, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('delete', $task);
         $em->remove($task);
         $em->flush();
 

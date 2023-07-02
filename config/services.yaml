@@ -20,5 +20,11 @@ services:
            # - '../src/Entity/'
             - '../src/Kernel.php'
 
+    security.access.post_voter:
+        class: App\Security\Voter\TaskVoter
+        public: false
+        tags:
+            - { name: security.voter }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
