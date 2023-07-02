@@ -6,7 +6,6 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Faker;
 
 class UserFixtures extends Fixture
 {
@@ -19,27 +18,25 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $faker = Faker\Factory::create('fr_FR');
-        $roles = ['ROLE_USER', 'ROLE_ADMIN'];
-
-        for ($nbUsers = 1; $nbUsers <= 10; $nbUsers++) {
+        for ($nbUsers = 1; $nbUsers <= 5; $nbUsers++) {
             $user = new User();
 
             $user->setUsername(sprintf('user+%d', $nbUsers));
             $user->setEmail(sprintf('user+%d@gmail.com', $nbUsers));
             $user->setPassword($this->encoder->hashPassword($user, 'password'));
-            $user->setRoles($faker->randomElements($roles));
+            $user->setRole('ROLE_ADMIN');
             $manager->persist($user);
 
             $this->addReference('user_'. $nbUsers, $user);
         }
 
-        for ($nbUsers = 11; $nbUsers <= 16; $nbUsers++) {
+        for ($nbUsers = 6; $nbUsers <= 10; $nbUsers++) {
             $user = new User();
 
-            $user->setUsername('anonyme');
-            $user->setEmail('anonyme');
+            $user->setUsername(sprintf('user+%d', $nbUsers));
+            $user->setEmail(sprintf('user+%d@gmail.com', $nbUsers));
             $user->setPassword($this->encoder->hashPassword($user, 'password'));
+            $user->setRole('ROLE_USER');
             $manager->persist($user);
 
             $this->addReference('user_'. $nbUsers, $user);

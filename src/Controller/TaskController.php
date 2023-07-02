@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\User;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,7 +33,9 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $task->setAuthor($this->getUser());
+            /* @var User $user */
+            $user = $this->getUser();
+            $task->setAuthor($user);
             $task->setCreatedAt(new \DateTimeImmutable());
             $em = $entityManager;
 
@@ -50,7 +53,7 @@ class TaskController extends AbstractController
     #[Route('/tasks/finished', name: 'task_finished')]
     public function done(TaskRepository $taskRepository): Response
     {
-        $taskFinished = $taskRepository->findBy(['isDone' => 1]);
+        $taskFinished = $taskRepository->findBy(['done' => 1]);
 
         return $this->render('task/finished.html.twig', [
             'tasksFinished' => $taskFinished,
@@ -60,7 +63,7 @@ class TaskController extends AbstractController
     #[Route('/tasks/unfinished', name: 'task_unfinished')]
     public function unfinished(TaskRepository $taskRepository): Response
     {
-        $taskUnfinished = $taskRepository->findBy(['isDone' => 0]);
+        $taskUnfinished = $taskRepository->findBy(['done' => 0]);
 
         return $this->render('task/unfinished.html.twig', [
             'tasksUnfinished' => $taskUnfinished,
