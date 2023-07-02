@@ -27,6 +27,7 @@ class UserController extends AbstractController
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -56,16 +57,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/users/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
-
             $em->flush();
+
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('user_list', [], Response::HTTP_SEE_OTHER);
