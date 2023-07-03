@@ -20,9 +20,9 @@
                             Marquer non terminée
                         </button>
                     </form>
-                    <form action="{{ path('task_delete', {'id' : task.id }) }}">
+                    {% if task.author == app.user or (task.author.username == 'anonyme' and 'ROLE_ADMIN' in app.user.roles) %}<form action="{{ path('task_delete', {'id' : task.id }) }}">
                         <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
-                    </form>
+                    </form>{% endif %}
                 </div>
             </div>
         </div>
