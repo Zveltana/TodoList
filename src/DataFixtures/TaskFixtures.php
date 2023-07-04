@@ -14,14 +14,25 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
     {
         $faker = Faker\Factory::create('fr_FR');
 
-        for ($nbrTask = 1; $nbrTask <= 10; $nbrTask++) {
+        for ($nbrTask = 1; $nbrTask <= 7; $nbrTask++) {
             $task = new Task();
 
             $task->setTitle($faker->text());
             $task->setContent($faker->paragraph());
-            $task->setIsDone($faker->boolean());
+            $task->setDone($faker->boolean());
             $task->setCreatedAt(new \DateTimeImmutable());
-            $task->setAuthor($this->getReference('user_' . $faker->numberBetween(1, 16)));
+            $task->setAuthor($this->getReference('user_' . $faker->numberBetween(1, 10)));
+
+            $manager->persist($task);
+        }
+
+        for ($nbrTask = 8; $nbrTask <= 10; $nbrTask++) {
+            $task = new Task();
+
+            $task->setTitle($faker->text());
+            $task->setContent($faker->paragraph());
+            $task->setDone($faker->boolean());
+            $task->setCreatedAt(new \DateTimeImmutable());
 
             $manager->persist($task);
         }

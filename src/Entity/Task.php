@@ -21,14 +21,13 @@ class Task
     private ?string $content = null;
 
     #[ORM\Column]
-    private ?bool $isDone = false;
+    private ?bool $done = false;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, cascade: ["persist"], inversedBy: 'task')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $author;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private ?User $author = null;
 
     public function getId(): ?int
     {
@@ -59,14 +58,14 @@ class Task
         return $this;
     }
 
-    public function isIsDone(): ?bool
+    public function isDone(): ?bool
     {
-        return $this->isDone;
+        return $this->done;
     }
 
-    public function setIsDone(bool $isDone): static
+    public function setDone(bool $done): static
     {
-        $this->isDone = $isDone;
+        $this->done = $done;
 
         return $this;
     }

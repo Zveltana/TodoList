@@ -29,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    private array $roles = ['ROLE_USER'];
+    private string $role = 'ROLE_USER';
 
     public function getId(): ?int
     {
@@ -60,14 +60,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRoles(): array
+    public function getRole(): string
     {
-        return array_unique($this->roles);
+        return $this->role;
     }
 
-    public function setRoles(array $roles): static
+    public function setRole(string $role): static
     {
-        $this->roles = $roles;
+        $this->role = $role;
 
         return $this;
     }
@@ -92,5 +92,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->username;
+    }
+
+    public function getRoles(): array
+    {
+        return [$this->role];
     }
 }
