@@ -21,14 +21,14 @@ To ensure that everyone can work on the project with peace of mind, please ensur
 
 ### 4. Create a new branch which will respect the naming according to its use :
 
-   * For a new feature or modification :
-        ```
-        git checkout -b feature/<feature-name>
-        ```
-   * For a new fix :
-       ```
-       git checkout -b hotfix/<feature-name>
-       ```
+* For a new feature or modification :
+     ```
+     git checkout -b feature/<feature-name>
+     ```
+* For a new fix :
+    ```
+    git checkout -b hotfix/<feature-name>
+    ```
 <br>
 
 ### 5. Good code-writing practice
