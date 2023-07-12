@@ -7,6 +7,9 @@ use App\Entity\User;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use App\Security\Voter\TaskVoter;
+use App\Services\Task\CreateTask;
+use App\Services\Task\DeleteTask;
+use App\Services\Task\ToggleTask;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +29,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/create', name: 'task_create')]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, CreateTask $createTask): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -34,14 +37,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /* @var User $user */
-            $user = $this->getUser();
-            $task->setAuthor($user);
-            $task->setCreatedAt(new \DateTimeImmutable());
-            $em = $entityManager;
-
-            $em->persist($task);
-            $em->flush();
+            $createTask->create($task);
 
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
 
@@ -93,27 +89,17 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
-    public function toggle(Task $task, EntityManagerInterface $em): Response
+    public function toggle(Task $task, ToggleTask $toggleTask): Response
     {
-        if ($task->isDone() !== true) {
-            $task->setDone(true);
-            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
-        } else {
-            $task->setDone(false);
-            $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme non terminée.', $task->getTitle()));
-        }
-
-        $em->flush();
+        $toggleTask->toggle($task);
 
         return $this->redirectToRoute('task_list');
     }
 
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
-    public function delete(Task $task, EntityManagerInterface $em): Response
+    public function delete(Task $task, DeleteTask $deleteTask): Response
     {
-        $this->denyAccessUnlessGranted('delete', $task);
-        $em->remove($task);
-        $em->flush();
+        $deleteTask->delete($task);
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
