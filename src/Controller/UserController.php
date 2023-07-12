@@ -57,13 +57,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/users/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $em): Response
+    public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
+            $userRepository->save($user, true);
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
@@ -74,15 +74,5 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
-    }
-
-    #[Route('/users/{id}', name: 'user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $userRepository->remove($user, true);
-        }
-
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

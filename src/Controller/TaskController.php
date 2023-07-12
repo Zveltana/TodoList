@@ -6,7 +6,6 @@ use App\Entity\Task;
 use App\Entity\User;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
-use App\Security\Voter\TaskVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

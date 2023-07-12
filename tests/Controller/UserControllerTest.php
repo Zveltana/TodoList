@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Controller;
+namespace App\Tests\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -9,115 +9,118 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserControllerTest extends WebTestCase
 {
-    private KernelBrowser $client;
-    private UserRepository $repository;
-    private string $path = '/user/';
+    private \Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->client = static::createClient();
-        $this->repository = static::getContainer()->get('doctrine')->getRepository(User::class);
-
-        foreach ($this->repository->findAll() as $object) {
-            $this->repository->remove($object, true);
-        }
     }
 
-    public function testIndex(): void
+    public function loginAdmin(): void
     {
-        $crawler = $this->client->request('GET', $this->path);
+        $crawler = $this->client->request('GET', '/login');
 
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('User index');
+        $form = $crawler->selectButton('Se connecter')->form();
+        $form['_username'] = 'user+1';
+        $form['_password'] = 'password';
 
-        // Use the $crawler to perform additional assertions e.g.
-        // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
+        $this->client->submit($form);
     }
 
-    public function testNew(): void
+    public function loginUser(): void
     {
-        $originalNumObjectsInRepository = count($this->repository->findAll());
+        $crawler = $this->client->request('GET', '/login');
 
-        $this->markTestIncomplete();
-        $this->client->request('GET', sprintf('%snew', $this->path));
+        $form = $crawler->selectButton('Se connecter')->form();
+        $form['_username'] = 'user+10';
+        $form['_password'] = 'password';
 
-        self::assertResponseStatusCodeSame(200);
-
-        $this->client->submitForm('Save', [
-            'user[username]' => 'Testing',
-            'user[password]' => 'Testing',
-            'user[email]' => 'Testing',
-        ]);
-
-        self::assertResponseRedirects('/user/');
-
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+        $this->client->submit($form);
     }
 
-    public function testShow(): void
+    public function logout(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new User();
-        $fixture->setUsername('My Title');
-        $fixture->setPassword('My Title');
-        $fixture->setEmail('My Title');
-
-        $this->repository->save($fixture, true);
-
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('User');
-
-        // Use assertions to check that the properties are properly displayed.
+        $this->client->request('GET', '/logout');
     }
 
-    public function testEdit(): void
-    {
-        $this->markTestIncomplete();
-        $fixture = new User();
-        $fixture->setUsername('My Title');
-        $fixture->setPassword('My Title');
-        $fixture->setEmail('My Title');
+   public function testIndex(): void
+   {
+       $this->loginUser();
+       $this->client->request('GET', '/users');
+       $this->assertResponseStatusCodeSame(403);
 
-        $this->repository->save($fixture, true);
+       $this->logout();
 
-        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
-
-        $this->client->submitForm('Update', [
-            'user[username]' => 'Something New',
-            'user[password]' => 'Something New',
-            'user[email]' => 'Something New',
-        ]);
-
-        self::assertResponseRedirects('/user/');
-
-        $fixture = $this->repository->findAll();
-
-        self::assertSame('Something New', $fixture[0]->getUsername());
-        self::assertSame('Something New', $fixture[0]->getPassword());
-        self::assertSame('Something New', $fixture[0]->getEmail());
+       $this->loginAdmin();
+       $this->client->request('GET', '/users');
+       $this->assertResponseIsSuccessful();
+       $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testRemove(): void
-    {
-        $this->markTestIncomplete();
+   public function testCreateUser(): void
+   {
+       $this->loginUser();
+       $this->client->request('POST', '/users/create');
+       $this->assertResponseStatusCodeSame(403);
 
-        $originalNumObjectsInRepository = count($this->repository->findAll());
+       $this->logout();
 
-        $fixture = new User();
-        $fixture->setUsername('My Title');
-        $fixture->setPassword('My Title');
-        $fixture->setEmail('My Title');
+       $this->loginAdmin();
+       $crawler = $this->client->request('GET', '/users/create');
 
-        $this->repository->save($fixture, true);
+       $form = $crawler->selectButton('Ajouter')->form();
+       $form['user[username]'] = 'Arthur';
+       $form['user[email]'] = 'arthur@gmail.com';
+       $form['user[password][first]'] = 'password';
+       $form['user[password][second]'] = 'password';
+       $form['user[role]'] = 'ROLE_USER';
 
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+       $this->client->submit($form);
 
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-        $this->client->submitForm('Delete');
+       $this->assertResponseRedirects('/users');
+       $this->client->followRedirect();
 
-        self::assertSame($originalNumObjectsInRepository, count($this->repository->findAll()));
-        self::assertResponseRedirects('/user/');
-    }
+       $this->assertResponseIsSuccessful();
+       $this->assertSelectorTextContains('.alert-success', 'Superbe ! L\'utilisateur a bien été ajouté.');
+       $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+   }
+
+   public function testShow(): void
+   {
+       $this->loginUser();
+       $this->client->request('GET', '/users/34');
+       $this->assertResponseStatusCodeSame(403);
+
+       $this->logout();
+
+       $this->loginAdmin();
+       $this->client->request('GET', '/users/34');
+       $this->assertResponseIsSuccessful();
+       $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+   }
+
+   public function testEditUser(): void
+   {
+       $this->loginUser();
+       $this->client->request('GET', '/users/34/edit');
+       $this->assertResponseStatusCodeSame(403);
+
+       $this->logout();
+
+       $this->loginAdmin();
+       $crawler = $this->client->request('POST', '/users/34/edit');
+
+       $form = $crawler->selectButton('Modifier')->form();
+       $form['user[username]'] = 'Bob';
+       $form['user[email]'] = 'bob@gmail.com';
+       $form['user[role]'] = 'ROLE_ADMIN';
+       $this->client->submit($form);
+
+       $this->assertResponseRedirects('/users');
+       $this->client->followRedirect();
+
+       $this->assertResponseIsSuccessful();
+       $this->assertSelectorTextContains('.alert-success', 'Superbe ! L\'utilisateur a bien été modifié');
+       $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+   }
 }
