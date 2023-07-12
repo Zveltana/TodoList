@@ -5,11 +5,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Services\User\CreateUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
@@ -23,7 +23,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/users/create', name: 'user_create', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
+    public function new(Request $request, CreateUser $createUser): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -31,11 +31,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
-
-            $em->persist($user);
-            $em->flush();
+            $createUser->create($user);
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
@@ -81,8 +77,12 @@ class UserController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $userRepository->remove($user, true);
+
+            $this->addFlash('success', "L'utilisateur a bien été supprimé.");
+
+            return $this->redirectToRoute('user_list', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('user_list', [], Response::HTTP_SEE_OTHER);
     }
 }
