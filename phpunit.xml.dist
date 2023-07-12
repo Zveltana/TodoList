@@ -27,6 +27,10 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+
+        <exclude>
+            <directory suffix="Fixtures.php">src/DataFixtures</directory>
+        </exclude>
     </coverage>
 
     <listeners>
@@ -34,9 +38,8 @@
     </listeners>
 
     <!-- Run `composer require symfony/panther` before enabling this extension -->
-    <!--
     <extensions>
-        <extension class="Symfony\Component\Panther\ServerExtension" />
+        <!-- <extension class="Symfony\Component\Panther\ServerExtension" /> -->
+        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />
     </extensions>
-    -->
 </phpunit>

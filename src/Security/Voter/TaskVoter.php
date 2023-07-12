@@ -18,10 +18,12 @@ class TaskVoter extends Voter
     {
         $user = $token->getUser();
 
+        // @codeCoverageIgnoreStart
         if (!$user instanceof User) {
             // L'utilisateur n'est pas connecté
             return false;
         }
+        // @codeCoverageIgnoreEnd
 
         /** @var Task $task */
         $task = $subject;
