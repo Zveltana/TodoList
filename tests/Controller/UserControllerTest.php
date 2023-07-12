@@ -88,13 +88,13 @@ class UserControllerTest extends WebTestCase
    public function testShow(): void
    {
        $this->loginUser();
-       $this->client->request('GET', '/users/34');
+       $this->client->request('GET', '/users/113');
        $this->assertResponseStatusCodeSame(403);
 
        $this->logout();
 
        $this->loginAdmin();
-       $this->client->request('GET', '/users/34');
+       $this->client->request('GET', '/users/113');
        $this->assertResponseIsSuccessful();
        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
    }
@@ -102,13 +102,13 @@ class UserControllerTest extends WebTestCase
    public function testEditUser(): void
    {
        $this->loginUser();
-       $this->client->request('GET', '/users/34/edit');
+       $this->client->request('GET', '/users/113/edit');
        $this->assertResponseStatusCodeSame(403);
 
        $this->logout();
 
        $this->loginAdmin();
-       $crawler = $this->client->request('POST', '/users/34/edit');
+       $crawler = $this->client->request('POST', '/users/113/edit');
 
        $form = $crawler->selectButton('Modifier')->form();
        $form['user[username]'] = 'Bob';

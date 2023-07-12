@@ -175,7 +175,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
     public function testEditTask()
     {
         $this->loginUser();
-        $crawler = $this->client->request('POST', '/tasks/127/edit');
+        $crawler = $this->client->request('POST', '/tasks/200/edit');
 
         $form = $crawler->selectButton('Modifier')->form();
         $form['task[title]'] = 'Faire à manger';
@@ -196,13 +196,13 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
     public function testDeleteTaskAnonymous()
    {
        $this->loginUser();
-       $this->client->request('DELETE', '/tasks/131/delete');
+       $this->client->request('DELETE', '/tasks/203/delete');
        $this->assertResponseStatusCodeSame(403);
 
        $this->logout();
 
        $this->loginAdmin();
-       $crawler = $this->client->request('DELETE', '/tasks/131/delete');
+       $crawler = $this->client->request('DELETE', '/tasks/203/delete');
 
        $crawler->selectButton('Supprimer');
 

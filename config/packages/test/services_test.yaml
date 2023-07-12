@@ -1,3 +1,0 @@
-services:
-  Symfony\Component\Security\Core\Security :
-    public: true
