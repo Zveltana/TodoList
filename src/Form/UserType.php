@@ -20,11 +20,11 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, ['label' => "Nom d'utilisateur"])
-            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {
+            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                 $user = $event->getData();
                 $form = $event->getForm();
 
-                if (!$user || null === $user->getId()) {
+                if ($user instanceof User && null === $user->getId()) {
                     // Le formulaire est utilisé pour la création d'un utilisateur
                     $form->add('password', RepeatedType::class, [
                         'type' => PasswordType::class,
