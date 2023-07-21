@@ -20,10 +20,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 25)]
-    private ?string $username = null;
+    private string $username;
 
     #[ORM\Column(length: 64)]
-    private ?string $password = null;
+    private string $password;
 
     #[ORM\Column(length: 60)]
     private ?string $email = null;
@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -48,7 +48,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -84,9 +84,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
-        // TODO: Implement eraseCredentials() method.
     }
 
     public function getUserIdentifier(): string
