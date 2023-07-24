@@ -34,14 +34,13 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /* @var User $user */
+            /** @var User $user */
             $user = $this->getUser();
             $task->setAuthor($user);
             $task->setCreatedAt(new \DateTimeImmutable());
-            $em = $entityManager;
 
-            $em->persist($task);
-            $em->flush();
+            $entityManager->persist($task);
+            $entityManager->flush();
 
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
 

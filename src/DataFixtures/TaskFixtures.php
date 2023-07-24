@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -21,7 +22,9 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             $task->setContent($faker->paragraph());
             $task->setDone($faker->boolean());
             $task->setCreatedAt(new \DateTimeImmutable());
-            $task->setAuthor($this->getReference('user_' . $faker->numberBetween(1, 10)));
+            /** @var User $user */
+            $user = $this->getReference('user_' . $faker->numberBetween(1, 10));
+            $task->setAuthor($user);
 
             $manager->persist($task);
         }
