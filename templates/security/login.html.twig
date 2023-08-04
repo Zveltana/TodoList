@@ -5,12 +5,16 @@
         <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    <form method="post">
-        <label for="username">Nom d'utilisateur :</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}" autocomplete="username" required autofocus>
+    <form method="post" class="d-flex flex-row align-items-center">
+        <div class="me-4">
+            <label for="username">Nom d'utilisateur :</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}" autocomplete="username" required autofocus>
+        </div>
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="_password" autocomplete="current-password" required>
+        <div class="me-4">
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" name="_password" autocomplete="current-password" required>
+        </div>
 
         <input type="hidden" name="_csrf_token"
                value="{{ csrf_token('authenticate') }}"
