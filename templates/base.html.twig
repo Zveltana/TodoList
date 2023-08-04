@@ -36,12 +36,24 @@
 </head>
 
 <body>
-<nav class="navbar navbar-light navbar-fixed-top" style="background-color: #e3f2fd;" role="navigation">
+<nav class="navbar navbar-light navbar-fixed-top d-flex flex-row" style="background-color: #e3f2fd;" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" href="{{ path('homepage') }}">To Do List app</a>
 
             <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" />
+        </div>
+
+        <div>
+            <a href="{{ path('user_create') }}" class="btn mx-1 btn-primary">Créer un utilisateur</a>
+
+            {% if app.user %}
+                <a href="{{ path('logout') }}" class="pull-right mx-1 btn btn-danger">Se déconnecter</a>
+            {% endif %}
+
+            {% if not app.user and 'login' != app.request.attributes.get('_route') %}
+                <a href="{{ path('login') }}" class="btn mx-1 btn-success">Se connecter</a>
+            {% endif %}
         </div>
     </div>
 </nav>
@@ -49,27 +61,15 @@
 <!-- Page Content -->
 <div class="container">
     <div class="row">
-        <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
-
-        {% if app.user %}
-            <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
-        {% endif %}
-
-        {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-            <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
-        {% endif %}
-    </div>
-
-    <div class="row">
         <div class="col-md-12">
             {% for flash_message in app.session.flashBag.get('success') %}
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-success mt-4" role="alert">
                     <strong>Superbe !</strong> {{ flash_message }}
                 </div>
             {% endfor %}
 
             {% for flash_message in app.session.flashBag.get('error') %}
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-danger mt-4" role="alert">
                     <strong>Oops !</strong> {{ flash_message }}
                 </div>
             {% endfor %}
