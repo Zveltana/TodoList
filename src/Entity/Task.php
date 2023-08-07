@@ -87,6 +87,13 @@ class Task
         return $this->author;
     }
 
+    /**
+     * Set the author of this object.
+     *
+     * @param User $author The author to set.
+     *
+     * @return self Returns the instance of this object with the updated author.
+     */
     public function setAuthor(User $author): self
     {
         $this->author = $author;

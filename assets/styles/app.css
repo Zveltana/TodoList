@@ -1,2 +1,2 @@
-@import "shop-homepage.css";
-@import "~bootstrap";
+@import url("shop-homepage.css");
+@import url("~bootstrap");

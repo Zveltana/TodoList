@@ -38,11 +38,11 @@ class UserType extends AbstractType
                         'first_options'  => [
                             'label' => 'Mot de passe',
                             'attr' => ['class' => 'ms-1 ms-md-2'],
-                            ],
+                        ],
                         'second_options' => [
                             'label' => 'Tapez le mot de passe à nouveau',
                             'attr' => ['class' => 'ms-1 ms-md-2'],
-                            ],
+                        ],
                     ]);
                 } else {
                     // Le formulaire est utilisé pour la modification d'un utilisateur

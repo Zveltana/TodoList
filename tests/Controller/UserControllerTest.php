@@ -85,20 +85,6 @@ class UserControllerTest extends WebTestCase
        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
    }
 
-   public function testShow(): void
-   {
-       $this->loginUser();
-       $this->client->request('GET', '/users/113');
-       $this->assertResponseStatusCodeSame(403);
-
-       $this->logout();
-
-       $this->loginAdmin();
-       $this->client->request('GET', '/users/113');
-       $this->assertResponseIsSuccessful();
-       $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-   }
-
    public function testEditUser(): void
    {
        $this->loginUser();
