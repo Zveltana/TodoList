@@ -25,6 +25,16 @@ class TaskController extends AbstractController
         ]);
     }
 
+    /**
+     * Create a new task.
+     *
+     * This method handles the creation of a new task using the provided form data.
+     *
+     * @param Request             $request    The HTTP request object.
+     * @param CreateTaskInterface $createTask The service responsible for creating the task.
+     *
+     * @return Response The HTTP response object containing the result of the action.
+     */
     #[Route('/tasks/create', name: 'task_create')]
     public function create(Request $request, CreateTaskInterface $createTask): Response
     {
