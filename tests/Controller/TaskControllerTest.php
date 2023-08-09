@@ -2,16 +2,16 @@
 
 namespace App\Tests\Controller;
 
-use AllowDynamicProperties;
 use App\Tests\WebTestHelperTrait;
 use ReflectionException;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-#[AllowDynamicProperties] class TaskControllerTest extends WebTestCase
+class TaskControllerTest extends WebTestCase
 {
     use WebTestHelperTrait;
 
-    private \Symfony\Bundle\FrameworkBundle\KernelBrowser $client;
+    private KernelBrowser $client;
 
     public function setUp(): void
     {
