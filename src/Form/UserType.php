@@ -21,9 +21,6 @@ class UserType extends AbstractType
         $builder
             ->add('username', TextType::class, [
                 'label' => "Nom d'utilisateur",
-                'attr' => [
-                    'class' => 'ms-1 ms-md-2',
-                ],
             ])
             ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                 $user = $event->getData();
@@ -37,11 +34,9 @@ class UserType extends AbstractType
                         'required' => true,
                         'first_options'  => [
                             'label' => 'Mot de passe',
-                            'attr' => ['class' => 'ms-1 ms-md-2'],
                         ],
                         'second_options' => [
                             'label' => 'Tapez le mot de passe à nouveau',
-                            'attr' => ['class' => 'ms-1 ms-md-2'],
                         ],
                     ]);
                 } else {
@@ -51,9 +46,6 @@ class UserType extends AbstractType
             })
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email',
-                'attr' => [
-                    'class' => 'ms-1 ms-md-2',
-                ],
             ])
             ->add('role', ChoiceType::class, [
                 'label' => 'Role',
@@ -62,9 +54,6 @@ class UserType extends AbstractType
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
                 'required' => true,
-                'attr' => [
-                    'class' => 'ms-1 ms-md-2',
-                ],
             ])
         ;
     }

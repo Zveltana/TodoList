@@ -4,12 +4,6 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
-.form div {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
 .slide-image {
     width: 100%;
 }
