@@ -10,26 +10,16 @@
 {% block body %}
     <div class="row">
         {{ form_start(form, {'action' : path('user_create')}) }}
-        <div class="col-md-6 form">
-            <div class="mb-4">
-                {{ form_row(form.username) }}
-            </div>
+        <div class="col-md-6">
+            {{ form_row(form.username) }}
 
-            <div class="mb-4">
-                {{ form_row(form.email) }}
-            </div>
+            {{ form_row(form.email) }}
 
-            <div class="mb-4">
-                {{ form_row(form.role) }}
-            </div>
+            {{ form_row(form.role) }}
 
-            <div class="mb-4">
-                {{ form_row(form.password.first) }}
-            </div>
+            {{ form_row(form.password.first) }}
 
-            <div class="mb-4">
-                {{ form_row(form.password.second) }}
-            </div>
+            {{ form_row(form.password.second) }}
 
             <button type="submit" class="btn btn-success pull-right">Ajouter</button>
         </div>

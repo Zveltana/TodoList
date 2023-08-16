@@ -75,7 +75,7 @@ final class SecurityControllerTest extends WebTestCase
 
         self::assertIsAuthenticated(false);
 
-        $this->assertStringContainsString('Invalid credentials.', $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('Identifiants invalides.', $this->client->getResponse()->getContent());
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
