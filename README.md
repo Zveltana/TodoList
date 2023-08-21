@@ -17,6 +17,7 @@ The aim is to improve the quality of the application and perform the following t
 
 Codacy's note :
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0b971bf1d3e140759e328378be8e6085)](https://app.codacy.com/gh/Zveltana/TodoList?utm_source=github.com&utm_medium=referral&utm_content=Zveltana/TodoList&utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f278286c67fb4c36a3fc5c472b1e8ed0)](https://app.codacy.com/gh/Zveltana/TodoList/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ## Require
