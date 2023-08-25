@@ -66,3 +66,13 @@ To visualize the project in local, thanks to localhost it will be necessary to c
 
 ***
 # The SnowTricks site is ready to be used !
+
+## Connection
+
+To log in to the administrator account :
+-   username: `user+1`
+-   password : `password`
+
+To log in to the user account :
+-   username : `user+6`
+-   password : `password`
